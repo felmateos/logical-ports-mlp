@@ -18,6 +18,7 @@ class MultiLayerPerceptron:
             self.activationFunc = self.Func['tanh']
             self.activationDeriv = self.Deriv['tanh']
 
+        self.outputs = []
         self.weightsHidden = self.start_weights(self.inputLayer, self.hiddenLayer)
         self.weightsOutput = self.start_weights(self.hiddenLayer, self.outputLayer)
         self.biasHidden = self.start_bias(self.hiddenLayer)
@@ -38,4 +39,14 @@ class MultiLayerPerceptron:
         for _ in range(y):
             bias.append(random.randint(self.min_lim, self.max_lim))
         return bias
+    
+    def predict(self, x):
+        z = self.activationFunc(np.dot(self.weightsHidden, x) + self.biasHidden)
+        y = self.activationFunc(np.dot(self.weightsOutput, z) + self.biasOutput)
+        return y
 
+    def train(self, x, epochs):
+        for _ in range (epochs):
+            z = self.activationFunc(np.dot(self.weightsHidden, x) + self.biasHidden)
+            y = self.activationFunc(np.dot(self.weightsOutput, z) + self.biasOutput)
+        return y
