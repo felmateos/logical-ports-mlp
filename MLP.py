@@ -27,26 +27,41 @@ class MultiLayerPerceptron:
 
     def start_weights(self, x, y):
         weights = []
-        for _ in range(x):
+        for _ in range(y): #inverti p facilitar o calculo
             tempList = []
-            for _ in range(y):
-                tempList.append(random.randint(self.min_lim, self.max_lim))
+            for _ in range(x): #inverti p facilitar o calculo
+                tempList.append(random.uniform(self.min_lim, self.max_lim))
             weights.append(tempList)
         return weights
     
     def start_bias(self, y):
         bias = []
         for _ in range(y):
-            bias.append(random.randint(self.min_lim, self.max_lim))
+            bias.append(random.uniform(self.min_lim, self.max_lim))
         return bias
     
-    def predict(self, x):
-        z = self.activationFunc(np.dot(self.weightsHidden, x) + self.biasHidden)
-        y = self.activationFunc(np.dot(self.weightsOutput, z) + self.biasOutput)
-        return y
+    def predict(self, X):
+        z = []
 
-    def train(self, x, epochs):
-        for _ in range (epochs):
-            z = self.activationFunc(np.dot(self.weightsHidden, x) + self.biasHidden)
-            y = self.activationFunc(np.dot(self.weightsOutput, z) + self.biasOutput)
-        return y
+        for i in range(self.hiddenLayer):
+            zin = 0
+            pairs = zip(self.weightsHidden[i], X)
+            for w,x in tuple(pairs):
+                zin += w*x
+            zin += self.biasHidden[i]
+            z.append(self.activationFunc(zin))
+
+        y = 0
+
+        for i in range(self.outputLayer):
+            yin = 0
+            pairs = zip(self.weightsOutput[i], z)
+            for w,x in tuple(pairs):
+                yin += w*x
+            yin += self.biasOutput[i]
+            y = self.activationFunc(yin)
+
+            if y >= 0:
+                return 1
+            else:
+                return -1
