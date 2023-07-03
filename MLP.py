@@ -18,7 +18,7 @@ class MultiLayerPerceptron:
             self.L1 = 2
             self.L2 = 2
             self.learning_rate = 0.1
-            self.max_epochs = 100
+            self.max_epochs = 40
             self.activation_func = self.Act['tanh']
             self.activation_deriv = self.DerivA['tanh']
             self.error_func = self.Error['SR']
@@ -55,9 +55,7 @@ class MultiLayerPerceptron:
         temp = []
 
         for i,w in enumerate(self.weights_L1):
-            #print('feed', i, w)
             temp = [X*W for (X, W) in zip(x, w)]
-            #print('pos', temp)
             temp = np.sum(temp) + self.bias_L1[i]
             self.output_L1.append(self.activation_func(temp))
 
@@ -71,8 +69,6 @@ class MultiLayerPerceptron:
             self.output_L2.append(self.activation_func(temp))
 
         self.output_L2 = np.array(self.output_L2)
-
-        #print('X:', x, self.output_L1, self.output_L2)
 
 
     def one_hot_encoding(self, y):
